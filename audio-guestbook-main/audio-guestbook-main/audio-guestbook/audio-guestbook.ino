@@ -169,7 +169,12 @@ void loop() {
   buttonRecord.update();
   buttonPlay.update();
 
-
+// Handset is replaced
+if((buttonRecord.risingEdge() || (buttonRecord.duration() >= 1500 && buttonRecord.read())) && mode != Mode::Ready) {
+  playWav1.stop();
+  mode = Mode::Ready; print_mode();
+  return;
+}
   switch(mode){
     case Mode::Ready:
       // Falling edge occurs when the handset is lifted --> 611 telephone
@@ -188,6 +193,9 @@ void loop() {
       Serial.println("play greeting");
 
       wait(1000);
+
+
+
       // Play the greeting inviting them to record their message
       playWav1.play("greeting.wav");
 
